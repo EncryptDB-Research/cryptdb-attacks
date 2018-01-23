@@ -31,6 +31,9 @@ RUN /usr/sbin/mysqld & sleep 10s && echo "GRANT ALL ON *.* TO root@'%' IDENTIFIE
 RUN git clone https://github.com/yiwenshao/Practical-Cryptdb.git /opt/cryptdb
 WORKDIR /opt/cryptdb
 
+# adding data folder from local
+ADD ./data/medical.csv ./data
+
 # Adding debian compatibility to apt syntax
 RUN sed -i 's/apt /apt-get /g' INSTALL.sh
 
