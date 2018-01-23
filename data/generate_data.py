@@ -2,7 +2,7 @@ import numpy, pandas
 
 illnesses = ['cancer', 'headache', 'pneumonia', 'flu']
 
-names = pandas.read_csv('names.csv').drop(['percent', 'sex'], 1)
+names = pandas.read_csv('names_db.csv', nrows=50000).drop(['percent', 'sex'], 1)
 
 age = []
 illness = []
