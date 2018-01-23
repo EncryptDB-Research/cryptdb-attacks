@@ -1,4 +1,6 @@
-# from https://github.com/agribu/Practical-Cryptdb_Docker/edit/master/Dockerfile
+# 
+
+
 
 FROM ubuntu:16.04
 

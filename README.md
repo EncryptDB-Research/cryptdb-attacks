@@ -27,6 +27,18 @@ http://docs.docker.com/v1.8/installation/
 
 (Open the Docker Quickstart Terminal if OS X or Windows)
 
+
+## How to run the program
+
+#### AutoRun:
+
+sudo ./run.sh
+
+This runs the docker container then opens the command line inside the docker container
+After exiting the comand line the script stops the docker container then removes it
+
+#### Manual Run
+
 ##### 4. Run docker container based built image
 
     sudo docker run -d --name **name-of-container** -p **port-in**:**port-out** -p **port-in**:**port-out** -e MYSQL_ROOT_PASSWORD='letmein' **name-of-image**:**version**
@@ -45,7 +57,7 @@ http://docs.docker.com/v1.8/installation/
 
 
 
-## How to play around:
+## How to start encryptdb inside the container bash:
 
 ```
 ./cdbserver.sh
