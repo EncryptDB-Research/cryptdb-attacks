@@ -29,10 +29,10 @@ RUN /usr/sbin/mysqld & sleep 10s && echo "GRANT ALL ON *.* TO root@'%' IDENTIFIE
 
 # Clone project repository
 RUN git clone https://github.com/yiwenshao/Practical-Cryptdb.git /opt/cryptdb
-WORKDIR /opt/cryptdb
 
-# adding data folder from local
-ADD ./data/medical.csv ./data
+ADD ./data /opt/cryptdb/data
+
+WORKDIR /opt/cryptdb
 
 # Adding debian compatibility to apt syntax
 RUN sed -i 's/apt /apt-get /g' INSTALL.sh
@@ -48,6 +48,7 @@ nodaemon=true\n\
 command=service mysql start\n\
 \n\
 " > /etc/supervisor/conf.d/supervisord.conf
+# adding data folder from local
 
 ENV TERM xterm
 
