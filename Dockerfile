@@ -1,18 +1,28 @@
-# 
-
-
-
+# ubuntu:16.04
 FROM ubuntu:16.04
 
 MAINTAINER agribu
 
+LABEL cryptdb='1.0'
+
 # make sure the package repository is up to date
 RUN apt-get update
+
+# removing python2
+RUN apt-get remove -y python2.7 && apt purge -y python2.7-minimal 
 
 # Install stuff
 RUN apt-get install -y ca-certificates supervisor sudo ruby git vim less net-tools
 
+# install python and dependencies
+RUN apt-get install -y python3-pip python3-dev \
+    && cd /usr/local/bin \
+    && ln -s /usr/bin/python3 python \
+    && pip3 install --upgrade pip \
+    && apt-get install -y python-numpy python-scipy python-matplotlib python-pandas python-sympy python-nose python-minimal
+
 RUN mkdir -p /var/log/supervisor
+
 
 RUN echo 'root:root' |chpasswd
 
@@ -30,9 +40,14 @@ RUN /usr/sbin/mysqld & sleep 10s && echo "GRANT ALL ON *.* TO root@'%' IDENTIFIE
 # Clone project repository
 RUN git clone https://github.com/yiwenshao/Practical-Cryptdb.git /opt/cryptdb
 
-ADD ./data /opt/cryptdb/data
+# adding data file
+ADD ./data /opt/cryptdb/data/
 
+# chaning working dir
 WORKDIR /opt/cryptdb
+
+# installing python requirments
+RUN pip install -r ./data/requirements.txt
 
 # Adding debian compatibility to apt syntax
 RUN sed -i 's/apt /apt-get /g' INSTALL.sh
@@ -48,10 +63,7 @@ nodaemon=true\n\
 command=service mysql start\n\
 \n\
 " > /etc/supervisor/conf.d/supervisord.conf
-# adding data folder from local
 
 ENV TERM xterm
 
 CMD ["/usr/bin/supervisord"]
-
-EXPOSE 22 3306 3399
