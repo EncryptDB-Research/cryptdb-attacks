@@ -27,19 +27,18 @@ http://docs.docker.com/v1.8/installation/
 
 (Open the Docker Quickstart Terminal if OS X or Windows)
 
+## How to run docker
 
-## How to run the program
-
-#### AutoRun:
+#### Auto Run:
 
 sudo ./run.sh
 
 This runs the docker container then opens the command line inside the docker container
-After exiting the comand line the script stops the docker container then removes it
+After exiting the comand line the script stops the docker container
 
 #### Manual Run
 
-##### 4. Run docker container based built image
+##### 1. Run docker container based built image
 
     sudo docker run -d --name **name-of-container** -p **port-in**:**port-out** -p **port-in**:**port-out** -e MYSQL_ROOT_PASSWORD='letmein' **name-of-image**:**version**
 
@@ -48,7 +47,7 @@ After exiting the comand line the script stops the docker container then removes
 
 (Important: The password must be 'letmein')
 
-##### 5. For accessing a docker container, use
+## How to acccess docker shell
 
     sudo docker exec -it **name-of-container** bash
 
@@ -56,9 +55,15 @@ After exiting the comand line the script stops the docker container then removes
     sudo docker exec -it cryptdb_v1 bash
 
 
+## How to start encryptdb inside the docker shell:
 
-## How to start encryptdb inside the container bash:
+##### if running for the first time, you must run the following commands to insert the generated data into the database:
 
+```
+cd ./data
+bash setup.sh
+```
+##### To run cryptdb client and server use the following commands
 ```
 ./cdbserver.sh
 ./cdbclient.sh

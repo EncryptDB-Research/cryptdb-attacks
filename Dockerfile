@@ -8,21 +8,10 @@ LABEL cryptdb='1.0'
 # make sure the package repository is up to date
 RUN apt-get update
 
-# removing python2
-RUN apt-get remove -y python2.7 && apt purge -y python2.7-minimal 
-
 # Install stuff
 RUN apt-get install -y ca-certificates supervisor sudo ruby git vim less net-tools
 
-# install python and dependencies
-RUN apt-get install -y python3-pip python3-dev \
-    && cd /usr/local/bin \
-    && ln -s /usr/bin/python3 python \
-    && pip3 install --upgrade pip \
-    && apt-get install -y python-numpy python-scipy python-matplotlib python-pandas python-sympy python-nose python-minimal
-
 RUN mkdir -p /var/log/supervisor
-
 
 RUN echo 'root:root' |chpasswd
 
@@ -45,9 +34,6 @@ ADD ./data /opt/cryptdb/data/
 
 # chaning working dir
 WORKDIR /opt/cryptdb
-
-# installing python requirments
-RUN pip install -r ./data/requirements.txt
 
 # Adding debian compatibility to apt syntax
 RUN sed -i 's/apt /apt-get /g' INSTALL.sh
