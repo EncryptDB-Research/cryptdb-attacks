@@ -27,7 +27,7 @@ RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysq
 RUN /usr/sbin/mysqld & sleep 10s && echo "GRANT ALL ON *.* TO root@'%' IDENTIFIED BY 'letmein' WITH GRANT OPTION; FLUSH PRIVILEGES"
 
 # Clone project repository
-RUN git clone https://github.com/yiwenshao/Practical-Cryptdb.git /opt/cryptdb
+RUN git clone https://github.com/EncryptDB-Research/Practical-Cryptdb.git /opt/cryptdb
 
 # adding data file
 ADD ./data /opt/cryptdb/data/

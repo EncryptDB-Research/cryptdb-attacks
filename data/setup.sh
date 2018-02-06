@@ -3,3 +3,4 @@ apt-get update \
 && pip install --upgrade pip \
 && pip install -r ./requirements.txt \
 && python insert.py
+&& python insert_sensitive.py

@@ -6,6 +6,7 @@ illnesses = ['cancer', 'headache', 'pneumonia', 'flu']
 names = pandas.read_csv('names_db.csv', nrows=20000).drop(['percent', 'sex'], 1)
 name.drop_duplicates(subset=['name'], inplace=True)
 
+
 connection = pymysql.connect(host='localhost',
                              port=3399,
                              user='root',
@@ -26,7 +27,7 @@ names['age'] = age
 try:
     with connection.cursor() as cursor:
         # Create database
-        cursor.execute("CREATE DATABASE IF NOT EXISTS Medical")
+        cursor.execute("CREATE DATABASE IF NOT EXISTS MedicalS")
         cursor.execute("USE MedicalS")
         cursor.execute("DROP TABLE IF EXISTS patients, records")        
         cursor.execute("cryptdb princtype ext_user EXTERNAL")
@@ -42,15 +43,15 @@ try:
 
         cursor.execute(create_users)
 
-        # cursor.execute("CRYPTDB patients.username ext_user SPEAKSFOR patients.id user )") 
+        cursor.execute("CRYPTDB patients.username ext_user SPEAKSFOR patients.id user )") 
         
         create_records = "CREATE TABLE records( \
                         id INT(64), \
                         illness VARCHAR(50), \
                         age INT(64))"
 
-        # cursor.execute("CRYPTDB records.illness ENCFOR records.id")
-        # cursor.execute("CRYPTDB records.age ENCFOR records.id")
+        cursor.execute("CRYPTDB records.illness ENCFOR records.id")
+        cursor.execute("CRYPTDB records.age ENCFOR records.id")
 
         cursor.execute(create_records)
 
