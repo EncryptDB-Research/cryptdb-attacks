@@ -4,7 +4,7 @@ from time import sleep
 illnesses = ['cancer', 'headache', 'pneumonia', 'flu']
 
 names = pandas.read_csv('names_db.csv', nrows=20000).drop(['percent', 'sex'], 1)
-name.drop_duplicates(subset=['name'], inplace=True)
+names.drop_duplicates(subset=['name'], inplace=True)
 
 
 connection = pymysql.connect(host='localhost',
@@ -85,7 +85,7 @@ try:
         connection.commit()
 
         # giving a one second time for cryptdb to recover
-        sleep(1)
+        sleep(0.1)
 
     with connection.cursor() as cursor:
         sql = "SELECT * FROM patients"
