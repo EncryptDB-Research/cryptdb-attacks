@@ -60,6 +60,7 @@ After exiting the comand line the script stops the docker container
 ##### if running for the first time, you must run the following commands to insert the generated data into the database:
 
 ```
+./cdbserver.sh
 cd ./data
 bash setup.sh
 ```
