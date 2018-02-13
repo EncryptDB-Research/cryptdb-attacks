@@ -85,7 +85,7 @@ try:
         connection.commit()
 
         # giving a one second time for cryptdb to recover
-        sleep(1)
+        sleep(0.1)
 
     with connection.cursor() as cursor:
         sql = "SELECT * FROM patients"
