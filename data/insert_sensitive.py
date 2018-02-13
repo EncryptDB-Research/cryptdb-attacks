@@ -44,14 +44,16 @@ try:
         cursor.execute(create_users)
 
         cursor.execute("CRYPTDB patients.username ext_user SPEAKSFOR patients.id user )") 
+
+        # cursor.execute("CRYPTDB patients.id user SPEAKSFOR patients.id m_record ")
         
         create_records = "CREATE TABLE records( \
                         id INT(64), \
                         illness VARCHAR(50), \
                         age INT(64))"
 
-        cursor.execute("CRYPTDB records.illness ENCFOR records.id")
-        cursor.execute("CRYPTDB records.age ENCFOR records.id")
+        cursor.execute("CRYPTDB records.illness ENCFOR patients.id user")
+        cursor.execute("CRYPTDB records.age ENCFOR patients.id user")
 
         cursor.execute(create_records)
 
