@@ -4,7 +4,7 @@ from time import sleep
 illnesses = ['cancer', 'headache', 'pneumonia', 'flu']
 
 names = pandas.read_csv('names_db.csv', nrows=20000).drop(['percent', 'sex'], 1)
-name.drop_duplicates(subset=['name'], inplace=True)
+names.drop_duplicates(subset=['name'], inplace=True)
 
 connection = pymysql.connect(host='localhost',
                              port=3399,
@@ -27,7 +27,7 @@ try:
     with connection.cursor() as cursor:
         # Create database
         cursor.execute("CREATE DATABASE IF NOT EXISTS Medical")
-        cursor.execute("USE MedicalS")
+        cursor.execute("USE Medical")
         cursor.execute("DROP TABLE IF EXISTS patients, records")        
         cursor.execute("cryptdb princtype ext_user EXTERNAL")
         cursor.execute("cryptdb princtype user, m_record")
@@ -64,7 +64,7 @@ try:
 
         with connection.cursor() as cursor:
 
-            use_medical = "USE MedicalS"
+            use_medical = "USE Medical"
 
             cursor.execute(use_medical)
 
