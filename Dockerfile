@@ -33,16 +33,34 @@ ADD ./data /opt/cryptdb/data/
 # chaning working dir
 WORKDIR /opt/cryptdb
 
-# Setup
-RUN scripts/install.rb . -y
 
-# RUN echo "\
-# [supervisord]\n\
-# nodaemon=true\n\
-# \n\
-# [program:mysql]\n\
-# command=service mysql start\n\
-# \n\
-# " > /etc/supervisor/conf.d/supervisord.conf
+RUN apt-get remove bison libbison-dev
 
-# CMD ["/usr/bin/supervisord"]
+RUN cd packages \
+    && apt-get -y install m4 \
+    && dpkg -i libbison-dev_2.7.1.dfsg-1_amd64.deb \
+    && dpkg -i bison_2.7.1.dfsg-1_amd64.deb \
+    && cd ..
+
+RUN apt-get update
+
+
+USER root
+
+# instal cryptdb
+RUN scripts/install.rb . 
+
+RUN echo "\
+[supervisord]\n\
+nodaemon=true\n\
+\n\
+[program:mysql]\n\
+command=service mysql start\n\
+\n\
+" > /etc/supervisor/conf.d/supervisord.conf
+
+ENV TERM xterm
+
+ENV EDBDIR /opt/cryptdb
+
+CMD ["/usr/bin/supervisord"]

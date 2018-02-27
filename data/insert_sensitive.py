@@ -4,11 +4,11 @@ from time import sleep
 illnesses = ['cancer', 'headache', 'pneumonia', 'flu']
 
 names = pandas.read_csv('names_db.csv', nrows=20000).drop(['percent', 'sex'], 1)
-names.drop_duplicates(subset=['name'], inplace=True)
+names.drop_duplicates('name', inplace=True)
 
 
 connection = pymysql.connect(host='localhost',
-                             port=3399,
+                             port=3307,
                              user='root',
                              password='letmein',
                              charset='utf8mb4')

@@ -40,32 +40,28 @@ After exiting the comand line the script stops the docker container
 
 ##### 1. Run docker container based built image
 
-    sudo docker run -d --name **name-of-container** -p **port-in**:**port-out** -p **port-in**:**port-out** -e MYSQL_ROOT_PASSWORD='letmein' **name-of-image**:**version**
-
-    #Example:
     sudo docker run -d --name cryptdb_v1 -p 3306:3306 -p 3399:3399 -e MYSQL_ROOT_PASSWORD='letmein' cryptdb:v1
 
 (Important: The password must be 'letmein')
 
 ## How to acccess docker shell
 
-    sudo docker exec -it **name-of-container** bash
-
-    #Example:
     sudo docker exec -it cryptdb_v1 bash
 
-
-## How to start encryptdb inside the docker shell:
+## How to start Cryptdb inside the docker shell:
 
 ##### if running for the first time, you must run the following commands to insert the generated data into the database:
 
 ```
-./cdbserver.sh
-cd ./data
-bash setup.sh
+bash proxy.sh
+bash scripts/setup.sh
 ```
 ##### To run cryptdb client and server use the following commands
+Server
 ```
-./cdbserver.sh
-./cdbclient.sh
+bash proxy.sh
+```
+Client
+```
+mysql -u root -pletmein -h 127.0.0.1 -P 3307
 ```
