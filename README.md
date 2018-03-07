@@ -55,6 +55,12 @@ After exiting the comand line the script stops the docker container
 ```
 bash proxy.sh
 bash scripts/setup.sh
+export EBDIR=/opt/cryptdb/
+export LD_LIBRARY_PATH=$EDBDIR/obj/
+export CRYPTDB_PROXY_DEBUG=true
+export CRYPTDB_MODE=single
+export CRYPTDB_DB=MedicalS
+echo $CRYPTDB_DB $CRYPTDB_PROXY_DEBUG $CRYPTDB_MODE $EDBDIR $LD_LIBRARY_PATH
 ```
 ##### To run cryptdb client and server use the following commands
 Server

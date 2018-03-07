@@ -29,8 +29,8 @@ try:
         cursor.execute("CREATE DATABASE IF NOT EXISTS Medical")
         cursor.execute("USE Medical")
         cursor.execute("DROP TABLE IF EXISTS patients, records")        
-        cursor.execute("cryptdb princtype ext_user EXTERNAL")
-        cursor.execute("cryptdb princtype user, m_record")
+        # cursor.execute("cryptdb princtype ext_user EXTERNAL")
+        # cursor.execute("cryptdb princtype user, m_record")
 
         # create table        
         create_users = "CREATE TABLE patients( \
@@ -84,7 +84,7 @@ try:
         connection.commit()
 
         # giving a one second time for cryptdb to recover
-        sleep(1)
+        sleep(0.01)
 
     with connection.cursor() as cursor:
         sql = "SELECT * FROM patients"

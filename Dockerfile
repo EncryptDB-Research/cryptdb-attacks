@@ -63,4 +63,6 @@ ENV TERM xterm
 
 ENV EDBDIR /opt/cryptdb
 
+ENV LD_LIBRARY_PATH $EDBDIR/obj/
+
 CMD ["/usr/bin/supervisord"]

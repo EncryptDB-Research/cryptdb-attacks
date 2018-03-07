@@ -29,33 +29,31 @@ try:
         # Create database
         cursor.execute("CREATE DATABASE IF NOT EXISTS MedicalS")
         cursor.execute("USE MedicalS")
-        cursor.execute("DROP TABLE IF EXISTS patients, records")        
-        cursor.execute("cryptdb princtype ext_user EXTERNAL")
-        cursor.execute("cryptdb princtype user, m_record")
+        cursor.execute("DROP TABLE IF EXISTS patients, records, pwdcryptdb__patients")        
+        cursor.execute("cryptdb PRINCTYPE ext_user EXTERNAL")
+        cursor.execute("cryptdb PRINCTYPE user")
 
+    
+        cursor.execute("CREATE TABLE activeusers(username VARCHAR(255), password VARCHAR(255))")        
         # create table        
-        create_users = "CREATE TABLE patients( \
-                        id INT(64) NOT NULL, \
-                        username VARCHAR(50), \
-                        year INT(64))"
+        create_users = "CREATE TABLE patients(id INT(64), username VARCHAR(50), year INT(64))"
 
 
 
         cursor.execute(create_users)
 
-        cursor.execute("CRYPTDB patients.username ext_user SPEAKSFOR patients.id user )") 
+        cursor.execute("cryptdb patients.username ext_user SPEAKSFOR patients.id user") 
 
-        # cursor.execute("CRYPTDB patients.id user SPEAKSFOR patients.id m_record ")
+        # cursor.execute("cryptdb patients.username encfor patient.id")
         
-        create_records = "CREATE TABLE records( \
-                        id INT(64), \
-                        illness VARCHAR(50), \
-                        age INT(64))"
-
-        cursor.execute("CRYPTDB records.illness ENCFOR patients.id user")
-        cursor.execute("CRYPTDB records.age ENCFOR patients.id user")
+        create_records = "CREATE TABLE records(id integer, illness text, age integer)"
 
         cursor.execute(create_records)
+
+
+        cursor.execute("cryptdb records.illness ENCFOR patients.id user")
+        cursor.execute("cryptdb records.age ENCFOR patients.id user")
+
 
     # commit queries   
     connection.commit()  
@@ -67,9 +65,13 @@ try:
 
         with connection.cursor() as cursor:
 
-            use_medical = "USE MedicalS"
+            # cursor.execute("USE MedicalS")            
 
-            cursor.execute(use_medical)
+            insert_user = "INSERT INTO activeusers (username, password) VALUES (%s, %s)"
+            
+            cursor.execute(insert_user, (row[1], 'secret'+row[1]) )
+          
+            # inserting logged in user
 
             insert_patient = "INSERT INTO patients(id, username, year) VALUES (%s, %s, %s)"
     
@@ -84,10 +86,14 @@ try:
 
             cursor.execute(insert_record, record)
 
+            # remove_user = "DELETE FROM pwdcryptdb__patients where username=%s"
+
+            # cursor.execute(remove_user, (row[1]))
+
         connection.commit()
 
         # giving a one second time for cryptdb to recover
-        sleep(0.1)
+        sleep(0.01)
 
     with connection.cursor() as cursor:
         sql = "SELECT * FROM patients"
