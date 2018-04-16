@@ -50,11 +50,13 @@ class TREE:
 		FIN.write('Frequency\tValue\n')
 		if(self.root is not None):
 			self._printTREE(self.root, count)
+		FIN.close()
+	
 	def _printTREE(self, node, count):
 		if(node is not None):
 			self._printTREE(node.left, count)
 			stat = float(node.count)/float(count)
-			FIN.write('%.8f'%(stat) + '\t' + str(node.orig) + '\n')
+			FIN.write('%.8f'%(stat) + '\t' + str('node val') + '\n')
 			self._printTREE(node.right, count)
 
 #Connect to the database as the root user

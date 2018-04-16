@@ -1,3 +1,7 @@
+"""
+    This file inserts data with annotations
+"""
+
 import numpy, pandas, pymysql
 from time import sleep
 
@@ -29,12 +33,12 @@ try:
         # Create database
         cursor.execute("CREATE DATABASE IF NOT EXISTS MedicalS")
         cursor.execute("USE MedicalS")
-        cursor.execute("DROP TABLE IF EXISTS patients, records, pwdcryptdb__patients")        
+        cursor.execute("DROP TABLE IF EXISTS patients, records, activeusers")        
         cursor.execute("cryptdb PRINCTYPE ext_user EXTERNAL")
         cursor.execute("cryptdb PRINCTYPE user")
 
     
-        cursor.execute("CREATE TABLE activeusers(username VARCHAR(255), password VARCHAR(255))")        
+        cursor.execute("CREATE TABLE activeusers(username VARCHAR(255), psswd VARCHAR(255))")        
         # create table        
         create_users = "CREATE TABLE patients(id INT(64), username VARCHAR(50), year INT(64))"
 
@@ -46,7 +50,7 @@ try:
 
         # cursor.execute("cryptdb patients.username encfor patient.id")
         
-        create_records = "CREATE TABLE records(id integer, illness text, age integer)"
+        create_records = "CREATE TABLE records(id integer, illness text, age integer, type VARCHAR(5))"
 
         cursor.execute(create_records)
 
@@ -67,7 +71,7 @@ try:
 
             # cursor.execute("USE MedicalS")            
 
-            insert_user = "INSERT INTO activeusers (username, password) VALUES (%s, %s)"
+            insert_user = "INSERT INTO activeusers VALUES (%s, %s)"
             
             cursor.execute(insert_user, (row[1], 'secret'+row[1]) )
           
@@ -81,12 +85,11 @@ try:
 
             print 'inserting record  -> ' + str(record)
 
-
             insert_record = "INSERT INTO records(id, illness, age) VALUES (%s, %s, %s)"
 
             cursor.execute(insert_record, record)
 
-            # remove_user = "DELETE FROM pwdcryptdb__patients where username=%s"
+            # remove_user = "DELETE FROM activeusers WHERE username=%s"
 
             # cursor.execute(remove_user, (row[1]))
 

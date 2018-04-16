@@ -70,4 +70,13 @@ bash proxy.sh
 Client
 ```
 mysql -u root -pletmein -h 127.0.0.1 -P 3307
+
 ```
+
+## Functionalities added
+
+Fake data insertion in the wrapper lua that communicates to cryptdb. We created two main functions to intersect the query from the user
+and modify it to insert fake data and mark each data row. Then we also created a filter function that after the results are back from the servers
+takes out any fake data. These functions can be found in the lua wrapper file: **create_table_checker** and **lazy_active_smooth**. The filtering happens in the results codeblock on **next_handle**.
+
+

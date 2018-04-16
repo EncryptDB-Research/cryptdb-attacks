@@ -7,7 +7,7 @@ LABEL cryptdb='1.0'
 RUN apt-get update
 
 # Install stuff
-RUN apt-get install -y ca-certificates supervisor sudo ruby git vim less net-tools
+RUN apt-get install -y ca-certificates supervisor sudo ruby git vim less net-tools gdb
 
 RUN mkdir -p /var/log/supervisor
 
