@@ -73,7 +73,13 @@ mysql -u root -pletmein -h 127.0.0.1 -P 3307
 
 ```
 
-## Functionalities added
+## How do we run the attacks?
+
+We created two insertion scripts, one insert data normally and the other one inserts data using cryptdb sensitive annotations. Using pandas data frame with load up ~50k records of names but only insert about ~5k non-unique . Depending on the type of attack that we might want to test against we can keep one of the columns with unique values which will be ~1.9k records. Before inserting each data item we create a data set of patient records with 4 diseases, cancer, pneumonia, headache and flu, we then add them to the records about to be inserted with a desired distrubion for later comparison. 
+
+After all the data is inserted we login through mysql and run a couple queries to test that the insertion step worked. Then we run a query to take of the random layer from the illness column with the 4 distinct values to leave it at the DET layer. Then we use a python script that we created to run the frequency analyser on this column. Before we created the fake insertion we get a perfect frequency matct. 
+
+## Functionalities added to cryptdb
 
 Fake data insertion in the wrapper lua that communicates to cryptdb. We created two main functions to intersect the query from the user
 and modify it to insert fake data and mark each data row. Then we also created a filter function that after the results are back from the servers
