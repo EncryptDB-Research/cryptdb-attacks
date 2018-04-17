@@ -98,6 +98,10 @@ While the script is running:
 
 Note: We know before hand that we only have 4 unique values but in a real attack, the attacker would stop when the unique count is not equal the total count. 
 
+## How to get started in a regular VM
+
+Write here 
+
 ## Functionalities added to cryptdb
 
 Fake data insertion in the wrapper lua that communicates to cryptdb. We created two main functions to intersect the query from the user
