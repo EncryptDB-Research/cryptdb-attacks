@@ -1,88 +1,112 @@
-# CryptDB_Docker_SEED
+# Cryptdb Docker Seed
 
-## This repo contains the main cryptdb dockerfile, 
-## We are using a version of cryptdb that is updated to ubuntu 16.04 https://github.com/yiwenshao/Practical-Cryptdb
+## This repo contains the Dockerfile that donwloads and installs cryptdb, python scripts to insert data and research papers published by cryptdb developers.
 
-## How to setup (From the github readme):
+##  The cryptdb code base was forked from https://github.com/CryptDB/cryptdb to https://github.com/EncryptDB-Research/cryptdb-seed where it was modified.
 
-##### 1. Make sure to have Docker installed
+## How to get started using Docker:
 
-http://docs.docker.com/v1.8/installation/
+#### 1. Install Docker from https://docs.docker.com/install/
 
-###### This setup is for Linux. For OS X and Windows, install Docker Toolbox and skip the sudo part of the commands.
+#### 2. Build docker image (Open the Docker Quickstart Terminal if using OS X or Windows)
 
-##### 2. Create a folder, clone project and navigate to folder containing the Dockerfile
-
-    git clone https://github.com/agribu/Practical-Cryptdb_Docker.git
-
-##### 3. Build docker image
-
-    sudo docker build -t **name-of-image**:**version** **.**
-
-    #Example:
     sudo docker build -t cryptdb:v1 .
     
     #To build without caching use:
     sudo docker build --no-cache=true -t cryptdb:v1 .
 
-(Open the Docker Quickstart Terminal if OS X or Windows)
+This will create a docker image using ubuntu 14.04 with cryptdb installed inside. Then we can run this image as a virtual machine.
 
-## How to run docker
+#### 3. Running Docker
 
-#### Auto Run:
+Option 1: Autorun
+    
+    sudo ./run.sh
 
-sudo ./run.sh
 
-This runs the docker container then opens the command line inside the docker container
-After exiting the comand line the script stops the docker container
+This runs docker virtual machine and then opens the command line inside the vm. If you exit from here the run commands auto stops the vm.
 
-#### Manual Run
+Option 2: Manual Run
 
-##### 1. Run docker container based built image
+    docker run --name cryptdb_v1 --volume $(pwd)/data:/opt/cryptdb/data/ -d -p 3306:3306 -p 3307:3307 -e MYSQL_ROOT_PASSWORD='letmein' cryptdb:1.0
 
-    sudo docker run -d --name cryptdb_v1 -p 3306:3306 -p 3399:3399 -e MYSQL_ROOT_PASSWORD='letmein' cryptdb:v1
-
-(Important: The password must be 'letmein')
-
-## How to acccess docker shell
+The password must be `letmein`. This will run the docker vm but we still have to log into the command line inside by doing
 
     sudo docker exec -it cryptdb_v1 bash
 
-## How to start Cryptdb inside the docker shell:
+#### 4. (Optional if doing data insertion with python). Install python dependencies 
 
-##### if running for the first time, you must run the following commands to insert the generated data into the database:
+    bash ./data/setup.sh
 
-```
-bash proxy.sh
-bash scripts/setup.sh
-export EBDIR=/opt/cryptdb/
-export LD_LIBRARY_PATH=$EDBDIR/obj/
-export CRYPTDB_PROXY_DEBUG=true
-export CRYPTDB_MODE=single
-export CRYPTDB_DB=MedicalS
-echo $CRYPTDB_DB $CRYPTDB_PROXY_DEBUG $CRYPTDB_MODE $EDBDIR $LD_LIBRARY_PATH
-```
-##### To run cryptdb client and server use the following commands
+This will install the nesseray python dependencies
+
+#### 5. Running cryptdb 
+
 Server
-```
-bash proxy.sh
-```
+
+    bash proxy.sh
+
 Client
-```
-mysql -u root -pletmein -h 127.0.0.1 -P 3307
 
-```
+    mysql -u root -pletmein -h 127.0.0.1 -P 3307
 
-## How do we run the attacks?
+Note that each of these commands are required to be ran in two separate terminals. To open a second terminal inside docker just run the following command from your regular computer terminal.
 
-We created two insertion scripts, one insert data normally and the other one inserts data using cryptdb sensitive annotations. Using pandas data frame with load up ~50k records of names but only insert about ~5k non-unique . Depending on the type of attack that we might want to test against we can keep one of the columns with unique values which will be ~1.9k records. Before inserting each data item we create a data set of patient records with 4 diseases, cancer, pneumonia, headache and flu, we then add them to the records about to be inserted with a desired distrubion for later comparison. 
+    sudo docker exec -it cryptdb_v1 bash
 
-After all the data is inserted we login through mysql and run a couple queries to test that the insertion step worked. Then we run a query to take of the random layer from the illness column with the 4 distinct values to leave it at the DET layer. Then we use a python script that we created to run the frequency analyser on this column. Before we created the fake insertion we get a perfect frequency matct. 
+if you would like to run everything in one terminal then just do
+
+    bash proxy &
+    mysql -u root -pletmein -h 127.0.0.1 -P 3307
+
+But two terminals is highly recommended to see cryptdb's server output.
+
+#### 6. (Optional) Inserting data with python
+
+    cd data
+    # regular insertion
+    python insert.py
+    # sensitive insertion
+    python insert_sensitive.py
+
+
+These commands make take a while.
+
+#### 7. Running frequency attacks
+
+We created two insertion scripts, one insert data normally and the other one inserts data using cryptdb sensitive annotations. Using pandas data frame the scripts load up ~5k records of names that get inserted to the database. Some other times we also use ~1.9k unique name records records. Before inserting each data item we create a data set of patient records with 4 diseases, cancer, pneumonia, headache and flu, we then add them to the records about to be inserted with a desired distrubion for later comparison after the attack. After all the data is inserted we login through mysql and run a couple queries to test that the insertion step worked. Then we run a query to take off the random layer from the illness to leave it at the DET layer. Then we use `stats.py` to run the frequency analysis on this column. 
+
+To run the attack do the following after the data is inserted. Inside mysql client shell run
+
+    use Medical; # or MedicalS which is created by insert_sensitive.py script
+    select * from records where illness='cancer';
+
+This will peal off the random layer from the `illness` column and put it at DET. To confirm this, run the below command, it will show the `illness` column at the DET level.
+
+    set @cryptdb='show';
+
+After this, close mysql client and run the `stats.py` file in the data folder. From here on there's a little bit of guessing, since the table and column names are encrypted, but usually we find what the columns after a following these steps. 
+
+While the script is running: 
+
+1. Select database we which to analyse (Most likely `Medical`)
+2. Pick the first encrypted table name. 
+3. From the list of encrypted columns, pick one that contains `oEQ` in the name (which stands for equality or DET). Then the script will give a unique count of value in the column, 
+4. If the unique count is equal the total count then the layer still at RND, so we try a different column name that contains `oEQ`.  If we ran out of columns with `oEQ` then go back to the table selection and select a different table.
+5. We repeat step 4 until we find the column that has only 4 unique values
+6. Then the script will prompt to save the frequencies, select yes and check the file to see the frequencies obtained from the column. 
+
+Note: We know before hand that we only have 4 unique values but in a real attack, the attacker would stop when the unique count is not equal the total count. 
 
 ## Functionalities added to cryptdb
 
 Fake data insertion in the wrapper lua that communicates to cryptdb. We created two main functions to intersect the query from the user
 and modify it to insert fake data and mark each data row. Then we also created a filter function that after the results are back from the servers
-takes out any fake data. These functions can be found in the lua wrapper file: **create_table_checker** and **lazy_active_smooth**. The filtering happens in the results codeblock on **next_handle**.
+takes out any fake data. These functions can be found in the lua wrapper file: `create_table_checker` and `lazy_active_smooth`. The filtering happens in the results codeblock on `next_handler`.
 
+## TODOS:
 
+1. Create an annotation for the user to specify which columns should be auto adjusted.
+2. Look into random insertion instead of keeping the histogram flat, this will create a randomized histogram
+3. Implement Remove and Update queries as well to not mess up the histogram.
+4. Store frequencies in the database trough cryptdb with RND layer for maximun security
