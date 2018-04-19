@@ -1,5 +1,6 @@
 """
-This file inserts data without annotations
+Created by Joannier Pinales 
+Description: Inserts data into the database by giving a specific distrubution to the data.
 """
 
 import numpy, pandas, pymysql
@@ -8,7 +9,7 @@ from time import sleep
 illnesses = ['cancer', 'headache', 'pneumonia', 'flu']
 
 names = pandas.read_csv('names_db.csv', nrows=5000).drop(['percent', 'sex'], 1)
-# names.drop_duplicates('name', inplace=True)
+names.drop_duplicates('name', inplace=True)
 
 connection = pymysql.connect(host='127.0.0.1',
                              port=3307,
@@ -35,11 +36,11 @@ try:
         cursor.execute("DROP TABLE IF EXISTS patients, records")        
 
         # create table        
-        create_users =  "CREATE TABLE patients(id INT(64) NOT NULL AUTO_INCREMENT, username VARCHAR(50), year INT(64), fake INT(10), PRIMARY KEY (id))"
+        create_users =  "CREATE TABLE patients(id INT(64) NOT NULL AUTO_INCREMENT, username VARCHAR(50), year INT(64), PRIMARY KEY (id))"
 
         cursor.execute(create_users)
 
-        create_records = "CREATE TABLE records(id INT(64) NOT NULL AUTO_INCREMENT, illness VARCHAR(50), age INT(64), fake INT(10), PRIMARY KEY (id) )"
+        create_records = "CREATE TABLE records(id INT(64) NOT NULL AUTO_INCREMENT, illness VARCHAR(50), age INT(64), PRIMARY KEY (id) )"
 
         cursor.execute(create_records)
 

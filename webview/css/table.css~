@@ -1,0 +1,18 @@
+table {
+	border: 1px solid black;
+}
+table  a {
+	text-decoration:none;
+}
+tr:nth-child(even) {
+	background-color: #ddd;
+}
+th {
+	background-color: #333;
+	color: white;
+	padding: 16px;
+}
+td {
+	padding: 8px;
+	vertical-align:center;
+}

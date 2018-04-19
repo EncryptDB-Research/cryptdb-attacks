@@ -1,5 +1,7 @@
 """
-    This file inserts data with annotations
+Created by Joannier Pinales
+Description: Inserts data into the database by giving a specific distrubution to the data, uses 
+security annotations
 """
 
 import numpy, pandas, pymysql

@@ -1,3 +1,6 @@
+## Created by Joannier Pinales
+## Sets up the Docker image with cryptdb installed.
+
 # ubuntu:16.04
 FROM ubuntu:14.04
 
@@ -33,6 +36,7 @@ ADD ./data /opt/cryptdb/data/
 # chaning working dir
 WORKDIR /opt/cryptdb
 
+RUN touch /opt/mysqlproxy/freqs 
 
 RUN apt-get remove bison libbison-dev
 
