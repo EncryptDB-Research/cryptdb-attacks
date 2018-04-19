@@ -111,6 +111,8 @@ takes out any fake data. These functions can be found in the lua wrapper file: `
 ## TODOS:
 
 1. Create an annotation for the user to specify which columns should be auto adjusted.
-2. Look into random insertion instead of keeping the histogram flat, this will create a randomized histogram
-3. Implement Remove and Update queries as well to not mess up the histogram.
+2. Implement Remove and Update queries to not affect the histogram.
+3. Look into random insertion instead of keeping the histogram flat, this will create a randomized histogram
 4. Store frequencies in the database trough cryptdb with RND layer for maximun security
+5. Look into deleting fake data without compromising security
+6. Make the query parser more robust
