@@ -24,7 +24,7 @@ Option 1: Autorun
     sudo ./run.sh
 
 
-This runs docker virtual machine and then opens the command line inside the vm. If you exit from here the run commands auto stops the vm.
+This runs docker container and then opens the command line inside the vm. If you exit from here the run commands auto stops the vm.
 
 Option 2: Manual Run
 
@@ -74,11 +74,11 @@ In terminal, navigate to the cryptdb-attacks folder and run setup.sh
     cd cryptdb-attacks
     sudo ./setup.sh
 
-This will install bison2.7, ruby, git, apache2, php5, download our copy of cryptdb and install it.
+This will install bison2.7, ruby, git, apache2, php5, download our copy of cryptdb and installs it.
 
 #### 5. (Optional) To install the webview, run 
 
-    sudo cp -r ~/crytpdb-attacks/webview/ /var/www/html/
+    sudo cp -r ~/cryptdb-attacks/webview/ /var/www/html/
 
 This will copy the webview directory to the apache root
 To use webview, launch the browser, and go to **localhost/webview**
@@ -95,13 +95,13 @@ Client
 
     bash client.sh 
 
-Note that each of these commands are required to be ran in two separate terminals. If your computer does not have mysql client, then open a second terminal inside docker  running the following command from your regular computer terminal.
+Each of these commands is required to be ran in two separate terminals. If your computer does not have mysql client, then open a second terminal inside docker  running the following command from your regular computer terminal.
 
     sudo docker exec -it cryptdb_v1 bash
 
 Then run the client command stated earlier. If you are using a regular VM instead of docker then just run the client command in one of the VM's terminals.    
 
-If you would like to run everything in one terminal then just do
+If you would like to run everything in one terminal then do
 
     bash proxy &
     bash client.sh

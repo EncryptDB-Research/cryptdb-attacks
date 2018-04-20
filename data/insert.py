@@ -8,7 +8,7 @@ from time import sleep
 
 illnesses = ['cancer', 'headache', 'pneumonia', 'flu']
 
-names = pandas.read_csv('names_db.csv', nrows=5000).drop(['percent', 'sex'], 1)
+names = pandas.read_csv('names_db.csv', nrows=50000).drop(['percent', 'sex'], 1)
 names.drop_duplicates('name', inplace=True)
 
 connection = pymysql.connect(host='127.0.0.1',
@@ -27,6 +27,8 @@ for name in names['name']:
         
 names['illness'] = illness
 names['age'] = age
+
+print 'total count: ', len(names['illness'])
 
 try:
     with connection.cursor() as cursor:
