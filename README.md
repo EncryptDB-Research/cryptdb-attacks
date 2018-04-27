@@ -8,7 +8,12 @@
 
 #### 1. Install Docker from https://docs.docker.com/install/
 
-#### 2. Build docker image (Open the Docker Quickstart Terminal if using OS X or Windows)
+#### 2. Clone down the docker repo https://github.com/EncryptDB-Research/cryptdb-attacks
+
+    git clone https://github.com/EncryptDB-Research/cryptdb-attacks
+    cd cryptdb-attacks
+
+#### 3. Build docker image (Open the Docker Quickstart Terminal if using OS X or Windows)
 
     sudo docker build -t cryptdb:v1 .
     
@@ -17,7 +22,7 @@
 
 This will create a docker image using ubuntu 14.04 with cryptdb installed inside. Then we can run this image as a virtual machine.
 
-#### 3. Running Docker
+#### 4. Running Docker
 
 Option 1: Autorun
     

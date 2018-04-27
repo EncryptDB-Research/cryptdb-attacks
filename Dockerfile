@@ -1,7 +1,7 @@
 ## Created by Joannier Pinales
 ## Sets up the Docker image with cryptdb installed.
 
-# ubuntu:16.04
+# ubuntu:14.04
 FROM ubuntu:14.04
 
 LABEL cryptdb='1.0'
@@ -10,7 +10,7 @@ LABEL cryptdb='1.0'
 RUN apt-get update
 
 # Install stuff
-RUN apt-get install -y ca-certificates supervisor sudo ruby git vim less net-tools gdb
+RUN apt-get install -y ca-certificates supervisor sudo ruby git vim less net-tools gdb --fix-missing
 
 RUN mkdir -p /var/log/supervisor
 
@@ -36,8 +36,6 @@ ADD ./data /opt/cryptdb/data/
 # chaning working dir
 WORKDIR /opt/cryptdb
 
-RUN touch /opt/mysqlproxy/freqs 
-
 RUN apt-get remove bison libbison-dev
 
 RUN cd packages \
@@ -62,6 +60,8 @@ nodaemon=true\n\
 command=service mysql start\n\
 \n\
 " > /etc/supervisor/conf.d/supervisord.conf
+
+RUN touch /opt/cryptdb/mysqlproxy/freqs 
 
 ENV TERM xterm
 
